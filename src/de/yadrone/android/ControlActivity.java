@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Locale;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.speech.tts.TextToSpeech;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +28,6 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import at.abraxas.amarino.Amarino;
 import de.yadrone.base.IARDrone;
 
@@ -39,6 +39,7 @@ public class ControlActivity extends Activity {
 	private static IARDrone drone2 = null;
 	private static boolean isFlying = false;
 	private static TextView text;
+	private static TextToSpeech tts;
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +49,15 @@ public class ControlActivity extends Activity {
         text =  (TextView)findViewById(R.id.textView5);
         Preview preview = new Preview(this);
         ((FrameLayout) findViewById(R.id.preview)).addView(preview);
+        
+        tts = new TextToSpeech(ControlActivity.this, new TextToSpeech.OnInitListener() {
+			@Override
+			public void onInit(int status) {
+				if(status != TextToSpeech.ERROR){
+					tts.setLanguage(Locale.ENGLISH);
+				}				
+			}
+		});
         
         initButtons();
     }
@@ -209,6 +219,8 @@ public class ControlActivity extends Activity {
 				if (!isFlying)
 				{
 					text.setText("Land");
+					String temp = "Drone take off Initialised";
+					tts.speak(temp, TextToSpeech.QUEUE_ADD, null);
 					drone.takeOff();
 				}
 				else
@@ -240,8 +252,11 @@ public class ControlActivity extends Activity {
                       outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
                       outStream.write(data);
                       outStream.close();      
-                } catch (FileNotFoundException e) { e.printStackTrace();
-                } catch (IOException e) { e.printStackTrace();}
+                } catch (FileNotFoundException e) { 
+                	e.printStackTrace();
+                } catch (IOException e) { 
+                	e.printStackTrace();
+                }
           }
     };
     
@@ -275,6 +290,13 @@ public class ControlActivity extends Activity {
 			if(hmm.contains("air")){
 				isFlying = true;
 				drone2.getCommandManager().takeOff();
+				String temp = "Drone take off Initialised";
+				tts.speak(temp, TextToSpeech.QUEUE_ADD, null);
+			}
+			if(hmm.contains("emergency")){
+				drone2.reset();
+				String temp = "Emergency Emergency";
+				tts.speak(temp, TextToSpeech.QUEUE_ADD, null);
 			}
 		} 
 	}
@@ -301,6 +323,7 @@ public class ControlActivity extends Activity {
 	private void left(){
 		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'D', 0);
 	}
+
 	
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{

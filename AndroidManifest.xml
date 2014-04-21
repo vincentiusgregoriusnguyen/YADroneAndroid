@@ -36,7 +36,7 @@
         
         <activity
             android:name=".ControlActivity"
-            android:label="@string/title_activity_yadrone" />
+            android:label="Terrestrial Hawk" />
         
         <activity
             android:name=".NavDataActivity"

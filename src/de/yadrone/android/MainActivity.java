@@ -25,6 +25,7 @@ public class MainActivity extends Activity {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle("Terrestrial Hawk");
         
         WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         final TextView text = (TextView)findViewById(R.id.text_init);

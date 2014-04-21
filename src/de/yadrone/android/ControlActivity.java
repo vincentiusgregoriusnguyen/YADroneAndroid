@@ -43,6 +43,7 @@ public class ControlActivity extends Activity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         Amarino.connect(this, DEVICE_ADDRESS);
         setContentView(R.layout.activity_control);
+        setTitle("Terrestrial Hawk");
         text =  (TextView)findViewById(R.id.textView5);
         Preview preview = new Preview(this);
         ((FrameLayout) findViewById(R.id.preview)).addView(preview);

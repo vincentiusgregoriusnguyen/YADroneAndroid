@@ -10,6 +10,7 @@ import static com.googlecode.javacv.cpp.opencv_imgproc.CV_BGR2HSV;
 import static com.googlecode.javacv.cpp.opencv_imgproc.CV_MEDIAN;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvCvtColor;
 import static com.googlecode.javacv.cpp.opencv_imgproc.cvSmooth;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,7 +18,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+
 import javax.imageio.ImageIO;
+
 import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
 public class ObjectPositionDetect {
@@ -31,32 +34,29 @@ public class ObjectPositionDetect {
 	static char direction = 'e';
 	static ArrayList<String> directions = new ArrayList<String>();
 	
-    public static void main(String[] args) throws IOException {
-    //	extractRobot("Triangle.jpg");
-    //	findRobotDirection();
-    //	System.out.println("done");
-    	
-    /*	int factor = 2;
-    	maze = readMaze("maze2.jpg");
+ /*   public static void main(String[] args) throws IOException {
+    	stressTest();
+    }*/
+    
+    public static void mazeSolve(String x){
+    	FindTriangle.findTriangle(x);
+    	maze = readMaze(x);
     	maze = increaseBlackSpace(8);
     	constructImage(maze,"testing.png");
+    	int factor = 2;
     	resize(factor,"testing.png");
-        maze = readMaze("resized.png");
-        devide(maze);
-        createModifiedGraph(maze);
-   
-        for(int i = 16; i < 28; i++){
-        	for(int j = 20; j < 30; j++){
-        		maze[i][j] = 2;
-        	}
-        }
-        for(int i = 153; i < 159; i++){
-        	for(int j = 102; j < 107; j++){
-        		maze[i][j] = 3;
-        	}
-        }
-        constructImage(maze,"justtesting.png");
-        breadthfirstsearch(); 
+    	maze = readMaze("resized.png");
+    	devide(maze);
+    	createModifiedGraph(maze);
+    	int[][] triangle = readMaze("hsvthreshold.jpg");
+    	for(int i = 0; i < triangle.length; i++){
+    		for(int j = 0; j < triangle[0].length; j++){
+    			if((triangle[i][j] == 1){
+    				maze[i/2][j/2] = 2;
+    			}
+    		}
+    	}
+    	breadthfirstsearch(); 
         constructImage(maze,"ended.png");
         int[][] temp = maze.clone();
         maze = readMaze("maze2.jpg");
@@ -64,9 +64,9 @@ public class ObjectPositionDetect {
         TraversedNodes(factor);
         drawLines();
         constructImage(maze,"final.png");
+        findRobotDirection();
         findPath(); 
-        printDirections(); */
-    	stressTest();
+        printDirections(); 
     }
     
     public static boolean freeMaze(int[][] x){ 
@@ -99,6 +99,10 @@ public class ObjectPositionDetect {
     		allthenodes.size() + " nodes and " + 
     		traversednodes.size() + " moves");
     	}
+    }
+    
+    public static ArrayList<String> getDirections(){
+    	return directions;
     }
     
     public static void printDirections(){

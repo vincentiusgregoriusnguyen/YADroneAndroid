@@ -44,6 +44,7 @@ import georegression.struct.homo.Homography2D_F64;
 import georegression.struct.point.Point2D_F64;
 import georegression.struct.point.Point2D_I32;
 import georegression.transform.homo.HomographyPointOps_F64;
+
 import org.ddogleg.fitting.modelset.ModelManager;
 import org.ddogleg.fitting.modelset.ModelMatcher;
 import org.ddogleg.fitting.modelset.ransac.Ransac;
@@ -208,7 +209,7 @@ public class ExampleImageStitching {
 		Graphics2D g2 = output.createGraphics();
 
 		// draw lines around the distorted image to make it easier to see
-		Homography2D_F64 fromBtoWork = fromWorkToB.invert(null);
+		/*Homography2D_F64 fromBtoWork = fromWorkToB.invert(null);
 		Point2D_I32 corners[] = new Point2D_I32[4];
 		corners[0] = renderPoint(0,0,fromBtoWork);
 		corners[1] = renderPoint(colorB.width,0,fromBtoWork);
@@ -220,10 +221,13 @@ public class ExampleImageStitching {
 		g2.drawLine(corners[0].x,corners[0].y,corners[1].x,corners[1].y);
 		g2.drawLine(corners[1].x,corners[1].y,corners[2].x,corners[2].y);
 		g2.drawLine(corners[2].x,corners[2].y,corners[3].x,corners[3].y);
-		g2.drawLine(corners[3].x,corners[3].y,corners[0].x,corners[0].y);
+		g2.drawLine(corners[3].x,corners[3].y,corners[0].x,corners[0].y);*/
 
-		ShowImages.showWindow(output,"Stitched Images");
+		ImageIO.write(output, "PNG", new File("maze.png"));
+		ObjectPositionDetect.mazeSolve("maze.png");
+		//ShowImages.showWindow(output,"Stitched Images");
 	}
+	
 
 	private static Point2D_I32 renderPoint( int x0 , int y0 , Homography2D_F64 fromBtoWork )
 	{
@@ -232,16 +236,9 @@ public class ExampleImageStitching {
 		return new Point2D_I32((int)result.x,(int)result.y);
 	}
 
-	/*public static void main( String args[] ) {
-		BufferedImage imageA,imageB;
-		imageA = UtilImageIO.loadImage("../data/evaluation/stitch/mountain_rotate_01.jpg");
-		imageB = UtilImageIO.loadImage("../data/evaluation/stitch//mountain_rotate_03.jpg");
+	public static void StitchImages(ArrayList<String> x){
+		imageA = UtilImageIO.loadImage(x.get(0));
+		imageB  = UtilImageIO.loadImage(x.get(1));
 		stitch(imageA,imageB, ImageFloat32.class);
-		imageA = UtilImageIO.loadImage("../data/evaluation/stitch/kayak_01.jpg");
-		imageB = UtilImageIO.loadImage("../data/evaluation/stitch/kayak_03.jpg");
-		stitch(imageA,imageB, ImageFloat32.class);
-		imageA = UtilImageIO.loadImage("../data/evaluation/scale/rainforest_01.jpg");
-		imageB = UtilImageIO.loadImage("../data/evaluation/scale/rainforest_02.jpg");
-		stitch(imageA,imageB, ImageFloat32.class);
-	}*/
+	}
 }

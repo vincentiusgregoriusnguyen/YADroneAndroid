@@ -15,9 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
-
+package com.vincent.imageprocessing;
 import boofcv.abst.feature.associate.AssociateDescription;
 import boofcv.abst.feature.associate.ScoreAssociation;
 import boofcv.abst.feature.detdesc.DetectDescribePoint;
@@ -234,7 +232,7 @@ public class ExampleImageStitching {
 		return new Point2D_I32((int)result.x,(int)result.y);
 	}
 
-	public static void main( String args[] ) {
+	/*public static void main( String args[] ) {
 		BufferedImage imageA,imageB;
 		imageA = UtilImageIO.loadImage("../data/evaluation/stitch/mountain_rotate_01.jpg");
 		imageB = UtilImageIO.loadImage("../data/evaluation/stitch//mountain_rotate_03.jpg");
@@ -245,5 +243,5 @@ public class ExampleImageStitching {
 		imageA = UtilImageIO.loadImage("../data/evaluation/scale/rainforest_01.jpg");
 		imageB = UtilImageIO.loadImage("../data/evaluation/scale/rainforest_02.jpg");
 		stitch(imageA,imageB, ImageFloat32.class);
-	}
+	}*/
 }

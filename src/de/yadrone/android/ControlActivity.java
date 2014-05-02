@@ -1,5 +1,4 @@
 package de.yadrone.android;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -51,12 +50,9 @@ public class ControlActivity extends Activity {
         tts = new TextToSpeech(ControlActivity.this, new TextToSpeech.OnInitListener() {
 			@Override
 			public void onInit(int status) {
-				if(status != TextToSpeech.ERROR){
-					tts.setLanguage(Locale.ENGLISH);
-				}				
+				if(status != TextToSpeech.ERROR){tts.setLanguage(Locale.ENGLISH);}				
 			}
-		});
-        
+		});     
         initButtons();
     }
     
@@ -78,7 +74,8 @@ public class ControlActivity extends Activity {
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
 				Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-				i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+				i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, 
+						RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 				startActivityForResult(i,check);
 				return false;
 			}
@@ -114,8 +111,11 @@ public class ControlActivity extends Activity {
     	ImageButton forward = (ImageButton)findViewById(R.id.cmd_forward);
     	forward.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event){
-				if(event.getAction() == MotionEvent.ACTION_DOWN) {drone.getCommandManager().forward(20);}
-				else if (event.getAction() == MotionEvent.ACTION_UP){ drone.hover();}
+				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+					drone.getCommandManager().forward(20);
+				}else if (event.getAction() == MotionEvent.ACTION_UP){ 
+					drone.hover();
+				}
 				return true;
 			}
 		});
@@ -123,8 +123,11 @@ public class ControlActivity extends Activity {
     	ImageButton backward = (ImageButton)findViewById(R.id.cmd_backward);
     	backward.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event){
-				if(event.getAction() == MotionEvent.ACTION_DOWN){ drone.getCommandManager().backward(20);}
-				else if (event.getAction() == MotionEvent.ACTION_UP){drone.hover();}
+				if(event.getAction() == MotionEvent.ACTION_DOWN){ 
+					drone.getCommandManager().backward(20);
+				}else if (event.getAction() == MotionEvent.ACTION_UP){
+					drone.hover();
+				}
 				return true;
 			}
 		});
@@ -132,13 +135,12 @@ public class ControlActivity extends Activity {
     	
     	ImageButton left = (ImageButton)findViewById(R.id.cmd_left);
     	left.setOnTouchListener(new OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event)
-			{
-				if(event.getAction() == MotionEvent.ACTION_DOWN) 
+			public boolean onTouch(View v, MotionEvent event){
+				if(event.getAction() == MotionEvent.ACTION_DOWN){ 
 					drone.getCommandManager().goLeft(20);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
-	                drone.hover();
-
+				}else if (event.getAction() == MotionEvent.ACTION_UP){
+					drone.hover();
+				}
 				return true;
 			}
 		});
@@ -146,34 +148,31 @@ public class ControlActivity extends Activity {
     	
     	ImageButton right = (ImageButton)findViewById(R.id.cmd_right);
     	right.setOnTouchListener(new OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event)
-			{
-				if(event.getAction() == MotionEvent.ACTION_DOWN) 
+			public boolean onTouch(View v, MotionEvent event){
+				if(event.getAction() == MotionEvent.ACTION_DOWN){ 
 					drone.getCommandManager().goRight(20);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
+				}else if (event.getAction() == MotionEvent.ACTION_UP){
 	                drone.hover();
-
+				}
 				return true;
 			}
 		});
     	
     	ImageButton up = (ImageButton)findViewById(R.id.cmd_up);
     	up.setOnTouchListener(new OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event)
-			{
-				if(event.getAction() == MotionEvent.ACTION_DOWN) 
+			public boolean onTouch(View v, MotionEvent event){
+				if(event.getAction() == MotionEvent.ACTION_DOWN){
 					drone.getCommandManager().up(40);
-				else if (event.getAction() == MotionEvent.ACTION_UP)
+				}else if (event.getAction() == MotionEvent.ACTION_UP){
 	                drone.hover();
-
+				}
 				return true;
 			}
 		});
     	
     	ImageButton down = (ImageButton)findViewById(R.id.cmd_down);
     	down.setOnTouchListener(new OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event)
-			{
+			public boolean onTouch(View v, MotionEvent event){
 				if(event.getAction() == MotionEvent.ACTION_DOWN) 
 					drone.getCommandManager().down(40);
 				else if (event.getAction() == MotionEvent.ACTION_UP)
@@ -211,18 +210,14 @@ public class ControlActivity extends Activity {
 		}); */
     	 
     	final ImageButton landing = (ImageButton)findViewById(R.id.cmd_landing);
-    	landing.setOnClickListener(new OnClickListener() {
-			public void onClick(View v)
-			{
-				if (!isFlying)
-				{
+    	landing.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				if (!isFlying){
 					text.setText("Land");
 					String temp = "Drone take off Initialised";
 					tts.speak(temp, TextToSpeech.QUEUE_ADD, null);
 					drone.takeOff();
-				}
-				else
-				{
+				}else{
 					text.setText("Air");
 					drone.landing();
 				}
@@ -231,23 +226,24 @@ public class ControlActivity extends Activity {
 		});
     	
     	ImageButton emergency = (ImageButton)findViewById(R.id.cmd_emergency);
-    	emergency.setOnClickListener(new OnClickListener() {
-			public void onClick(View v)
-			{
+    	emergency.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
 				drone.reset();
 			}
 		});
 	}
     
     ShutterCallback shutterCallback = new ShutterCallback() {public void onShutter() {}};
-    PictureCallback rawCallback = new PictureCallback() {public void onPictureTaken(byte[] data, Camera camera) {}};
+    PictureCallback rawCallback = new PictureCallback() {
+    	public void onPictureTaken(byte[] data, Camera camera) {}};
 
     PictureCallback jpegCallback = new PictureCallback() {
           @SuppressLint("SdCardPath")
 		public void onPictureTaken(byte[] data, Camera camera) {
                 FileOutputStream outStream = null;
                 try {
-                      outStream = new FileOutputStream(String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
+                      outStream = new FileOutputStream(
+                    		  String.format("/sdcard/%d.jpg", System.currentTimeMillis()));
                       outStream.write(data);
                       outStream.close();      
                 } catch (FileNotFoundException e) { 
@@ -263,28 +259,16 @@ public class ControlActivity extends Activity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == check && resultCode == RESULT_OK){
 			hmm = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			if(hmm.contains("forward")){
-				drone2.getCommandManager().forward(30);
-			}
-			if(hmm.contains("backward")){
-				drone2.getCommandManager().backward(30);
-			}
-			if(hmm.contains("left")){
-				drone2.getCommandManager().goLeft(30);
-			}
-			if(hmm.contains("right")){
-				drone2.getCommandManager().goRight(30);
-			}
+			if(hmm.contains("forward")){drone2.getCommandManager().forward(30);}
+			if(hmm.contains("backward")){drone2.getCommandManager().backward(30);}
+			if(hmm.contains("left")){drone2.getCommandManager().goLeft(30);}
+			if(hmm.contains("right")){drone2.getCommandManager().goRight(30);}
 			if(hmm.contains("land")){
 				isFlying = false;
 				drone2.getCommandManager().landing();
 			}
-			if(hmm.contains("up")){
-				drone2.getCommandManager().up(40);
-			}
-			if(hmm.contains("down")){
-				drone2.getCommandManager().down(40);
-			}
+			if(hmm.contains("up")){drone2.getCommandManager().up(40);}
+			if(hmm.contains("down")){drone2.getCommandManager().down(40);}
 			if(hmm.contains("air")){
 				isFlying = true;
 				drone2.getCommandManager().takeOff();
@@ -299,32 +283,18 @@ public class ControlActivity extends Activity {
 		} 
 	}
 
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 	    MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.menu_control, menu);	    
 		return true;
 	}
 	
-	private void forward(){
-		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'A', 0);
-	}
-
-	private void backward(){
-		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'B', 0);
-	}
-
-	private void right(){
-		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'C', 0);
-	}
-
-	private void left(){
-		Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'D', 0);
-	}
-
+	private void forward(){Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'A', 0);}
+	private void backward(){Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'B', 0);}
+	private void right(){Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'C', 0);}
+	private void left(){Amarino.sendDataToArduino(this, DEVICE_ADDRESS, 'D', 0);}
 	
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
+	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent i;
 	    switch (item.getItemId()){
 	    	case R.id.menuitem_main:
